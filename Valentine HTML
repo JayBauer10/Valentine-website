@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will You Be My Valentine?</title>
+<style>
+/* ===== Fonts & Body ===== */
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto:wght@400;700&display=swap');
+body {
+    margin:0; padding:0;
+    font-family:'Roboto',sans-serif;
+    background:linear-gradient(135deg,#ffc1cc,#ffecf0);
+    overflow-x:hidden; text-align:center; color:#333;
+}
+
+/* ===== Headings & Paragraphs ===== */
+h1,h2,h3{margin:0.5em 0;}
+h1{font-family:'Great Vibes',cursive;font-size:3em;color:#e91e63;margin-top:30px;}
+p{font-size:1.2em;max-width:600px;margin:20px auto;line-height:1.5em;}
+
+/* ===== Buttons ===== */
+.btn{background:#e91e63;color:#fff;border:none;padding:15px 30px;margin:20px 10px;font-size:1.2em;border-radius:50px;cursor:pointer;transition:all 0.3s ease;position:relative;}
+.btn:hover{transform:scale(1.1);box-shadow:0 0 15px rgba(233,30,99,0.6);}
+
+/* ===== Floating Hearts ===== */
+.heart{position:absolute;width:20px;height:20px;background:red;transform:rotate(-45deg);animation:float 5s infinite linear;}
+.heart::before,.heart::after{content:'';position:absolute;width:20px;height:20px;background:red;border-radius:50%;}
+.heart::before{top:-10px;left:0;} .heart::after{left:10px;top:0;}
+@keyframes float{0%{transform:translateY(0) rotate(-45deg);opacity:1;}100%{transform:translateY(-600px) rotate(-45deg);opacity:0;}}
+
+/* ===== Sections ===== */
+.section{padding:100px 20px;opacity:0;transform:translateY(50px);transition:all 1s ease-out;}
+.visible{opacity:1;transform:translateY(0);}
+
+/* ===== Confetti ===== */
+@keyframes confetti{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(600px) rotate(360deg);opacity:0;}}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confetti 3s linear infinite;}
+
+/* ===== Hidden Love Note ===== */
+#loveNote{display:none;font-size:1.5em;color:#e91e63;margin-top:20px;font-family:'Great Vibes',cursive;}
+
+/* ===== Slideshow ===== */
+#carousel{position:relative;width:300px;height:300px;margin:20px auto;overflow:hidden;border-radius:15px;box-shadow:0 0 15px rgba(0,0,0,0.3);}
+#carousel img{width:100%;height:100%;position:absolute;top:0;left:0;opacity:0;transition:opacity 1s ease-in-out;}
+#carousel img.active{opacity:1;}
+</style>
+</head>
+<body>
+
+<!-- Background Music -->
+<audio id="bgMusic" autoplay loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Floating Hearts -->
+<script>
+const hearts = [];
+for(let i=0;i<25;i++){
+    let heart=document.createElement('div');
+    heart.classList.add('heart');
+    heart.style.left=Math.random()*window.innerWidth+'px';
+    heart.style.animationDuration=(3+Math.random()*5)+'s';
+    heart.style.width=heart.style.height=(10+Math.random()*20)+'px';
+    document.body.appendChild(heart);
+    hearts.push(heart);
+}
+</script>
+
+<!-- Hero Section -->
+<div class="section visible" id="hero">
+    <h1>Hi Omoyosola ❤️</h1>
+    <p>I have a very important question for you…</p>
+    <img src="images/omoyosola1.jpg" alt="Omoyosola" style="width:200px; border-radius:15px; margin-top:20px; box-shadow:0 0 15px rgba(0,0,0,0.3);">
+</div>
+
+<!-- Slideshow Section -->
+<div class="section" id="photos">
+    <h2>Some of my favorite moments with you 💖</h2>
+    <div id="carousel">
+        <img src="images/photo1.jpg" class="slide active">
+        <img src="images/photo2.jpg" class="slide">
+        <img src="images/photo3.jpg" class="slide">
+    </div>
+</div>
+
+<!-- Story Section -->
+<div class="section" id="story">
+    <p>Every smile you give, every laugh we share… it makes my days brighter.  
+    I’ve been thinking… maybe it’s time I ask the obvious 😏</p>
+</div>
+
+<!-- Proposal Section -->
+<div class="section" id="proposal">
+    <h2>Omoyosola… will you be my Valentine?</h2>
+    <button class="btn" id="yesBtn">💕 Yes</button>
+    <button class="btn" id="noBtn">😌 Maybe / No</button>
+    <div id="loveNote">
+        *“You make my world sweeter every day, and I can’t wait to make you smile forever. 💖”*
+    </div>
+</div>
+
+<script>
+// Buttons & Love Note
+const yesBtn=document.getElementById('yesBtn');
+const noBtn=document.getElementById('noBtn');
+const loveNote=document.getElementById('loveNote');
+const audio=document.getElementById('bgMusic');
+
+// Slideshow with smooth fade
+let slides = document.querySelectorAll('#carousel .slide');
+let current = 0;
+setInterval(()=>{
+    slides[current].classList.remove('active');
+    current = (current+1) % slides.length;
+    slides[current].classList.add('active');
+}, 3000);
+
+// Music-synced fireworks + confetti + heart pulse
+yesBtn.addEventListener('click',()=>{
+    audio.play();
+    const interval = setInterval(()=>{
+        const time = audio.currentTime;
+        if(time>0 && time<audio.duration){
+            triggerFirework();
+            triggerConfetti();
+            pulseHearts();
+        }else{ clearInterval(interval); }
+    },500); 
+    alert("I knew you’d say yes 😍");
+});
+
+// Fireworks
+function triggerFirework(){
+    for(let i=0;i<5;i++){ createFirework(Math.random()*window.innerWidth, Math.random()*window.innerHeight/2); }
+}
+
+// Confetti
+function triggerConfetti(){
+    for(let i=0;i<20;i++){
+        let confetti=document.createElement('div');
+        confetti.classList.add('confetti');
+        confetti.style.left=Math.random()*window.innerWidth+'px';
+        confetti.style.backgroundColor=`hsl(${Math.random()*360},100%,50%)`;
+        confetti.style.animationDuration=(1+Math.random()*2)+'s';
+        document.body.appendChild(confetti);
+        setTimeout(()=>{ confetti.remove(); },2000);
+    }
+}
+
+// Firework helper
+function createFirework(x,y){
+    for(let i=0;i<20;i++){
+        let fire=document.createElement('div');
+        fire.style.position='absolute';
+        fire.style.left=x+'px'; fire.style.top=y+'px';
+        fire.style.width=fire.style.height='8px';
+        fire.style.backgroundColor=`hsl(${Math.random()*360},100%,50%)`;
+        fire.style.borderRadius='50%';
+        fire.style.pointerEvents='none';
+        document.body.appendChild(fire);
+        let angle=Math.random()*2*Math.PI; let speed=2+Math.random()*5;
+        let dx=Math.cos(angle)*speed; let dy=Math.sin(angle)*speed;
+        let id=setInterval(()=>{
+            let left=parseFloat(fire.style.left); let top=parseFloat(fire.style.top);
+            fire.style.left=left+dx+'px'; fire.style.top=top+dy+'px';
+            fire.style.opacity-=0.02;
+            if(fire.style.opacity<=0){ fire.remove(); clearInterval(id);}
+        },20);
+    }
+}
+
+// Heart pulse function
+function pulseHearts(){
+    hearts.forEach((heart,i)=>{
+        const scale = 1 + Math.sin(Date.now()/200 + i)/4;
+        const hue = (Date.now()/10 + i*20)%360;
+        heart.style.transform = `rotate(-45deg) scale(${scale})`;
+        heart.style.backgroundColor = `hsl(${hue},100%,50%)`;
+    });
+}
+
+// No button runs away
+noBtn.addEventListener('mouseover',()=>{
+    const x=Math.random()*window.innerWidth-100;
+    const y=Math.random()*window.innerHeight-100;
+    noBtn.style.position='absolute'; noBtn.style.left=x+'px'; noBtn.style.top=y+'px';
+});
+
+// Scroll reveal
+const sections=document.querySelectorAll('.section');
+window.addEventListener('scroll',()=>{
+    const triggerBottom=window.innerHeight/5*4;
+    sections.forEach(section=>{
+        const boxTop=section.getBoundingClientRect().top;
+        if(boxTop<triggerBottom){ section.classList.add('visible'); }
+    });
+});
+
+// Hidden love note toggle
+document.getElementById('hero').addEventListener('dblclick',()=>{
+    loveNote.style.display = loveNote.style.display==='none'?'block':'none';
+});
+</script>
+
+</body>
+</html>
